@@ -12,16 +12,15 @@ namespace dotnet_core_service_template
     {
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
+            Configuration = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+                .AddEnvironmentVariables()
+                .Build();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("log.txt")
+                .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
         }
 
@@ -31,7 +30,7 @@ namespace dotnet_core_service_template
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options => { options.Filters.Add(typeof(LoggingFilter)); });
 
             services.AddSwaggerGen(c =>
             {
