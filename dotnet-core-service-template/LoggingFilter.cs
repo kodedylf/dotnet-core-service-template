@@ -9,7 +9,7 @@ namespace dotnet_core_service_template
     {
         public async Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
         {
-            var request = context.HttpContext.Request.Method + " " + context.HttpContext.Request.Path;
+            Log.Information($"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}");
 
             var originalBodyStream = context.HttpContext.Response.Body;
             var stream = new MemoryStream();
@@ -19,8 +19,7 @@ namespace dotnet_core_service_template
 
             stream.Seek(0, SeekOrigin.Begin);
             StreamReader sr = new StreamReader(stream);
-            var response = context.HttpContext.Response.StatusCode + " " + sr.ReadToEnd();
-            Log.Information(request + "\r\n" + response);
+            Log.Information($"{context.HttpContext.Response.StatusCode} {sr.ReadToEnd()}");
 
             stream.Seek(0, SeekOrigin.Begin);
             stream.CopyTo(originalBodyStream);
