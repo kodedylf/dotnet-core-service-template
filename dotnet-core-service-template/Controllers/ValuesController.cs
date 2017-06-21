@@ -1,19 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace dotnet_core_service_template.Controllers
 {
     [Route("api/values")]
     public class ValuesController : Controller
     {
+        private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IActionContextAccessor _actionContextAccessor;
+
+        public ValuesController(IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
+        {
+            _urlHelperFactory = urlHelperFactory;
+            _actionContextAccessor = actionContextAccessor;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public object Get()
         {
-            return new string[] { "value1", "value2" };
+            return new {
+                values = new string[] { "value1", "value2" },
+                url = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext).AbsoluteAction("Get", "Values")
+            };
         }
 
         // GET api/values/5
