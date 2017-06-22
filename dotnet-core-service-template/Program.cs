@@ -13,7 +13,11 @@ namespace dotnet_core_service_template
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
-                .UseKestrel()
+                .UseKestrel(options =>
+                {
+                    options.UseHttps("certificates/template.pfx", "template");
+                })
+                .UseUrls("https://*:4430")
                 .UseStartup<Startup>()
                 .Build();
 
