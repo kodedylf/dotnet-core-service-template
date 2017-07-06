@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
 namespace dotnet_core_service_template
@@ -17,7 +12,7 @@ namespace dotnet_core_service_template
                 {
                     options.UseHttps("certificates/template.pfx", "template");
                 })
-                .UseUrls("https://*:4430")
+                .UseUrls("https://*:14114")
                 .UseStartup<Startup>()
                 .Build();
 

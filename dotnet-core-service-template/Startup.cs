@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,13 @@ namespace dotnet_core_service_template
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc(options => { options.Filters.Add(typeof(LoggingFilter)); });
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+                options.Filters.Add(typeof(LoggingFilter));
+            });
+
+            services.AddMvc();
 
             services.AddSwaggerGen(c =>
             {

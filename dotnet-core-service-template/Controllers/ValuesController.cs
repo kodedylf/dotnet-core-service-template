@@ -28,9 +28,13 @@ namespace dotnet_core_service_template.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public object Get(int id)
         {
-            return "value";
+            return new
+            {
+                value = "value",
+                url = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext).AbsoluteAction("Get", "Values", new { id = id })
+            };
         }
 
         // POST api/values
